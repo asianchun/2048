@@ -1,0 +1,45 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.heading {
+    display: flex;
+    flex: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.button {
+    cursor: pointer;
+}
+
+h4 {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.canvas {
+    display: grid;
+    border: 3px solid;
+    height: 400px;
+    width: 400px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 8px 8px;
+}
+
+.playArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid green;
+}
