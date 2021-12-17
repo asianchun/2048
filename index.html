@@ -3,16 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-      <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bakbak+One&display=swap"
       rel="stylesheet"
     />
 
@@ -25,29 +27,29 @@
   <body>
     <div class="heading">
       <h1>Simple 2048</h1>
-      <button class="button">undo</button>
-      <button class="button">new game</button>
+      <button class="button" data-undo>undo</button>
+      <button class="button" data-reset>new game</button>
     </div>
 
     <h4 class="score">Score: 0</h4>
 
     <div class="canvas">
-      <div class="playArea"><div class="playArea test">2</div></div>
-      <div class="playArea">2</div>
-      <div class="playArea">3</div>
-      <div class="playArea">4</div>
-      <div class="playArea">5</div>
-      <div class="playArea">6</div>
-      <div class="playArea">7</div>
-      <div class="playArea">8</div>
-      <div class="playArea">9</div>
-      <div class="playArea">10</div>
-      <div class="playArea">11</div>
-      <div class="playArea">12</div>
-      <div class="playArea">13</div>
-      <div class="playArea">14</div>
-      <div class="playArea">15</div>
-      <div class="playArea">16</div>
+      <div class="playArea"><div class="playArea block two">2</div></div>
+      <div class="playArea"><div class="playArea block four">4</div></div>
+      <div class="playArea"><div class="playArea block eight">8</div></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
+      <div class="playArea"></div>
     </div>
   </body>
 </html>

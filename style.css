@@ -44,7 +44,8 @@ html {
 }
 
 .canvas {
-  border-radius: 10px;
+  background-color: rgb(177, 177, 177);
+  border-radius: 13px;
   display: grid;
   border: 3px solid;
   height: 400px;
@@ -55,17 +56,29 @@ html {
 }
 
 .playArea {
+  background-color: #fff8de;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid green;
   border-radius: 10px;
 }
 
-.test {
-  width: 100px;
-  height: 100px;
-  background-color: rgb(255, 201, 121);
+.block {
+  width: 94px;
+  height: 94px;
   color: white;
-  font-size: 30px;
+  font-size: 35px;
+  font-family: "Bakbak One", cursive;
+}
+
+.two {
+  background-color: #ffe1b5;
+}
+
+.four {
+  background-color: rgb(255, 201, 121);
+}
+
+.eight {
+  background-color: #ffba52;
 }
