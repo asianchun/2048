@@ -1,45 +1,71 @@
-*, *::before, *::after {
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
-    display: flex;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff8de;
 }
 
 .heading {
-    display: flex;
-    flex: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-    font-family: 'Josefin Sans', sans-serif;
+  display: flex;
+  flex: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  font-family: "Josefin Sans", sans-serif;
 }
 
 .button {
-    cursor: pointer;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 16px;
+  font-family: "Josefin Sans", sans-serif;
+  padding: 5px 5px;
+  color: black;
+  background-color: #fff8de;
+  box-shadow: 2px 2px 2px #75756f;
 }
 
-h4 {
-    margin: 0;
-    font-family: 'Josefin Sans', sans-serif;
+.button:hover {
+  box-shadow: 1px 1px 2px #fff8de;
+  color: #fff8de;
+  background-color: black;
+}
+
+.score {
+  margin: 0;
+  font-family: "Josefin Sans", sans-serif;
 }
 
 .canvas {
-    display: grid;
-    border: 3px solid;
-    height: 400px;
-    width: 400px;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    gap: 8px 8px;
+  border-radius: 10px;
+  display: grid;
+  border: 3px solid;
+  height: 400px;
+  width: 400px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 6px 6px;
 }
 
 .playArea {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid green;
+  border-radius: 10px;
+}
+
+.test {
+  width: 100px;
+  height: 100px;
+  background-color: rgb(255, 201, 121);
+  color: white;
+  font-size: 30px;
 }
