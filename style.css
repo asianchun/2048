@@ -14,7 +14,6 @@ html {
 
 .heading {
   display: flex;
-  flex: row;
   align-items: center;
   justify-content: space-between;
   height: 40px;
@@ -55,7 +54,7 @@ html {
   gap: 6px 6px;
 }
 
-.playArea {
+.play-area {
   background-color: #fff8de;
   display: flex;
   align-items: center;
@@ -72,13 +71,45 @@ html {
 }
 
 .two {
-  background-color: #ffe1b5;
+  background-color: #ffd391;
 }
 
 .four {
-  background-color: rgb(255, 201, 121);
+  background-color: #ffc269;
 }
 
 .eight {
-  background-color: #ffba52;
+  background-color: #ffb341;
+}
+
+.sixteen {
+  background-color: #ffa216;
+}
+
+.thirty-two {
+  background-color: #ffa991;
+}
+
+.sixty-four {
+  background-color: #ffaa69;
+}
+
+.one-two-eight {
+  background-color: #ff7842;
+}
+
+.two-five-six {
+  background-color: #ff6721;
+}
+
+.five-one-two {
+  background-color: #9691ff;
+}
+
+.one-thousand-two-four {
+  background-color: #a869ff;
+}
+
+.two-thousand-four-eight {
+  background-color: #aa42ff;
 }
