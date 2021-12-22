@@ -1,44 +1,31 @@
 //Variables
-const undo = document.querySelector("[data-undo]")
 const reset = document.querySelector("[data-reset]")
 const playArea = document.querySelectorAll(".play-area")
 const score = document.querySelector(".score")
+const right = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+const left = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+const down = [0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]
+const up = [15, 11, 7, 3, 14, 10, 6, 2, 13, 9, 5, 1, 12, 8, 4, 0]
 let takenTiles = []
-let lose = false
-//0,1,2,3 / 4,5,6,7 / 8,9,10,11 / 12,13,14,15 right
-//0,4,8,12 / 1,5,9,13 / 2,6,10,14 / 3,7,11,15 down
-//3,2,1,0 / 7,6,5,4 / 11,10,9,8 / 15,14,13,12 left
-//12,8,4,0 / 13,9,5,1 / 14,10,6,2 / 15,11,7,3 up
 
 //Functions
 let start = () => {
   for (let i = 0; i < 2; i++) {
     createBlock()
   }
-
-  console.log("Game started/restarted")
-}
-
-function checkLoss() {
-  if (takenTiles.length == playArea.length) {
-    lose = true
-    score.append(" You lost!")
-  }
 }
 
 function clearCanvas() {
   takenTiles = []
   lose = false
-  score.innerText = "Score: 0"
+  score.innerText = "Good luck!"
 
   for (let i in playArea) {
     let block = playArea[i].children
 
     if (block === undefined) break
 
-    if (block.length != 0) {
-      block[0].remove()
-    }
+    if (block.length != 0) block[0].remove()
   }
 }
 
@@ -47,20 +34,26 @@ function createBlock() {
   let type = Math.floor(Math.random() * 2)
   let randomNumber = 0
 
+  //Make sure new blocks can be placed
+  if (takenTiles.length == playArea.length) {
+    score.innerText = "You done out here!"
+    return
+  }
+
   //Make sure both blocks are not in the same area
   do {
     exit = true
     randomNumber = Math.floor(Math.random() * playArea.length)
 
     for (let i in takenTiles) {
-      if (takenTiles[i] == randomNumber) {
-        exit = false
-      }
+      if (takenTiles[i] == randomNumber) exit = false
     }
   } while (!exit)
 
   takenTiles.push(randomNumber)
-  checkLoss()
+  takenTiles.sort(function (x, y) {
+    return x - y
+  })
 
   //2
   if (type == 0) {
@@ -82,31 +75,87 @@ function createBlock() {
   }
 }
 
-//Onclick
-undo.onclick = () => {
-  console.log("Undo the ting")
+function moveBlock(direction, array) {
+  for (let i in takenTiles) {
+    let skip = false
+
+    //Don't move the block, if the 'road' is blocked (fix down & right)
+    for (let n in takenTiles) {
+      switch (direction) {
+        case "right":
+          if (takenTiles[i] + 1 == takenTiles[n]) skip = true
+          break
+        case "left":
+          if (takenTiles[i] - 1 == takenTiles[n]) skip = true
+          break
+        case "down":
+          if (takenTiles[i] + 4 == takenTiles[n]) skip = true
+          break
+        case "up":
+          if (takenTiles[i] - 4 == takenTiles[n]) skip = true
+          break
+        default:
+          console.log("Something went wrong")
+      }
+    }
+
+    //Don't move the block, if it is on the edge
+    if (
+      takenTiles[i] != array[3] &&
+      takenTiles[i] != array[7] &&
+      takenTiles[i] != array[11] &&
+      takenTiles[i] != array[15] &&
+      !skip
+    ) {
+      let tile = playArea[takenTiles[i]].childNodes
+
+      //Move the block by 1 (for now) in the correct direction
+      switch (direction) {
+        case "right":
+          playArea[takenTiles[i] + 1].appendChild(tile[0])
+          takenTiles[i]++
+          break
+        case "left":
+          playArea[takenTiles[i] - 1].appendChild(tile[0])
+          takenTiles[i]--
+          break
+        case "down":
+          playArea[takenTiles[i] + 4].appendChild(tile[0])
+          takenTiles[i] += 4
+          break
+        case "up":
+          playArea[takenTiles[i] - 4].appendChild(tile[0])
+          takenTiles[i] -= 4
+          break
+        default:
+          console.log("Something went wrong")
+      }
+    }
+  }
+
+  createBlock()
 }
 
+//New game
 reset.onclick = () => {
+  console.clear() //Delete later
   clearCanvas()
   start()
 }
 
 //On keyboard
 document.addEventListener("keydown", (event) => {
-  if (lose) return
-
   if (event.key == "ArrowLeft") {
-    createBlock()
+    moveBlock("left", left)
     console.log("Go left boi")
   } else if (event.key == "ArrowRight") {
-    createBlock()
+    moveBlock("right", right)
     console.log("Go right boi")
   } else if (event.key == "ArrowDown") {
-    createBlock()
+    moveBlock("down", down)
     console.log("Go down boi")
   } else if (event.key == "ArrowUp") {
-    createBlock()
+    moveBlock("up", up)
     console.log("Go up boi")
   }
 })
