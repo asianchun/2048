@@ -2,6 +2,19 @@
 const reset = document.querySelector("[data-reset]")
 const playArea = document.querySelectorAll(".play-area")
 const score = document.querySelector(".score")
+const progression = [
+  ".two",
+  ".four",
+  ".eight",
+  ".sixteen",
+  ".thirty-two",
+  ".sixty-four",
+  ".one-two-eight",
+  ".two-five-six",
+  ".five-one-two",
+  ".one-thousand-two-four",
+  ".two-thousand-four-eight",
+]
 const right = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 const left = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const down = [0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]
@@ -51,9 +64,6 @@ function createBlock() {
   } while (!exit)
 
   takenTiles.push(randomNumber)
-  takenTiles.sort(function (x, y) {
-    return x - y
-  })
 
   //2
   if (type == 0) {
@@ -76,10 +86,22 @@ function createBlock() {
 }
 
 function moveBlock(direction, array) {
+  //Sort the array in order to have proper movement
+  if (direction == "right" || direction == "down") {
+    takenTiles.sort(function (x, y) {
+      return y - x
+    })
+  } else if (direction == "left" || direction == "up") {
+    takenTiles.sort(function (x, y) {
+      return x - y
+    })
+  }
+
+  //Move each block accordingly
   for (let i in takenTiles) {
     let skip = false
 
-    //Don't move the block, if the 'road' is blocked (fix down & right)
+    //Don't move the block, if the 'road' is blocked
     for (let n in takenTiles) {
       switch (direction) {
         case "right":
@@ -110,6 +132,7 @@ function moveBlock(direction, array) {
       let tile = playArea[takenTiles[i]].childNodes
 
       //Move the block by 1 (for now) in the correct direction
+      //TODO: Enable moving until it cannot anymore
       switch (direction) {
         case "right":
           playArea[takenTiles[i] + 1].appendChild(tile[0])
