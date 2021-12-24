@@ -85,6 +85,76 @@ function createBlock() {
   }
 }
 
+//TODO: Create the ability to combine blocks using the progression
+function combineBlock() {
+  console.log("blocks combined")
+}
+
+function countIterations(ar, i, n, spread, operator) {
+  let iteration = 3
+
+  //Control the left and up movement
+  if (operator == "-") {
+    if (
+      takenTiles[i] - 3 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[1] ||
+      takenTiles[i] == ar[5] ||
+      takenTiles[i] == ar[9] ||
+      takenTiles[i] == ar[13]
+    )
+      iteration = 2
+
+    if (
+      takenTiles[i] - 2 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[2] ||
+      takenTiles[i] == ar[6] ||
+      takenTiles[i] == ar[10] ||
+      takenTiles[i] == ar[14]
+    )
+      iteration = 1
+
+    if (
+      takenTiles[i] - 1 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[3] ||
+      takenTiles[i] == ar[7] ||
+      takenTiles[i] == ar[11] ||
+      takenTiles[i] == ar[15]
+    )
+      iteration = 0
+  }
+  //Control the right and down movement
+  else if (operator == "+") {
+    if (
+      takenTiles[i] + 3 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[1] ||
+      takenTiles[i] == ar[5] ||
+      takenTiles[i] == ar[9] ||
+      takenTiles[i] == ar[13]
+    )
+      iteration = 2
+
+    if (
+      takenTiles[i] + 2 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[2] ||
+      takenTiles[i] == ar[6] ||
+      takenTiles[i] == ar[10] ||
+      takenTiles[i] == ar[14]
+    )
+      iteration = 1
+
+    if (
+      takenTiles[i] + 1 * spread == takenTiles[n] ||
+      takenTiles[i] == ar[3] ||
+      takenTiles[i] == ar[7] ||
+      takenTiles[i] == ar[11] ||
+      takenTiles[i] == ar[15]
+    )
+      iteration = 0
+  }
+
+  return iteration
+}
+
 function moveBlock(direction, array) {
   //Sort the array in order to have proper movement
   if (direction == "right" || direction == "down") {
@@ -99,60 +169,53 @@ function moveBlock(direction, array) {
 
   //Move each block accordingly
   for (let i in takenTiles) {
-    let skip = false
+    let tile = playArea[takenTiles[i]].childNodes
+    let iteration = 0
 
-    //Don't move the block, if the 'road' is blocked
+    //Check by how much to move each block
     for (let n in takenTiles) {
       switch (direction) {
         case "right":
-          if (takenTiles[i] + 1 == takenTiles[n]) skip = true
+          if (takenTiles[i] < takenTiles[n] || i == 0)
+            iteration = countIterations(array, i, n, 1, "+")
           break
         case "left":
-          if (takenTiles[i] - 1 == takenTiles[n]) skip = true
+          if (takenTiles[i] > takenTiles[n] || i == 0)
+            iteration = countIterations(array, i, n, 1, "-")
           break
         case "down":
-          if (takenTiles[i] + 4 == takenTiles[n]) skip = true
+          if (takenTiles[i] < takenTiles[n] || i == 0)
+            iteration = countIterations(array, i, n, 4, "+")
           break
         case "up":
-          if (takenTiles[i] - 4 == takenTiles[n]) skip = true
+          if (takenTiles[i] > takenTiles[n] || i == 0)
+            iteration = countIterations(array, i, n, 4, "-")
           break
         default:
           console.log("Something went wrong")
       }
     }
 
-    //Don't move the block, if it is on the edge
-    if (
-      takenTiles[i] != array[3] &&
-      takenTiles[i] != array[7] &&
-      takenTiles[i] != array[11] &&
-      takenTiles[i] != array[15] &&
-      !skip
-    ) {
-      let tile = playArea[takenTiles[i]].childNodes
-
-      //Move the block by 1 (for now) in the correct direction
-      //TODO: Enable moving until it cannot anymore
-      switch (direction) {
-        case "right":
-          playArea[takenTiles[i] + 1].appendChild(tile[0])
-          takenTiles[i]++
-          break
-        case "left":
-          playArea[takenTiles[i] - 1].appendChild(tile[0])
-          takenTiles[i]--
-          break
-        case "down":
-          playArea[takenTiles[i] + 4].appendChild(tile[0])
-          takenTiles[i] += 4
-          break
-        case "up":
-          playArea[takenTiles[i] - 4].appendChild(tile[0])
-          takenTiles[i] -= 4
-          break
-        default:
-          console.log("Something went wrong")
-      }
+    //Make the movement
+    switch (direction) {
+      case "right":
+        playArea[takenTiles[i] + iteration].appendChild(tile[0])
+        takenTiles[i] += iteration
+        break
+      case "left":
+        playArea[takenTiles[i] - iteration].appendChild(tile[0])
+        takenTiles[i] -= iteration
+        break
+      case "down":
+        playArea[takenTiles[i] + 4 * iteration].appendChild(tile[0])
+        takenTiles[i] += 4 * iteration
+        break
+      case "up":
+        playArea[takenTiles[i] - 4 * iteration].appendChild(tile[0])
+        takenTiles[i] -= 4 * iteration
+        break
+      default:
+        console.log("Something went wrong")
     }
   }
 
@@ -160,13 +223,15 @@ function moveBlock(direction, array) {
 }
 
 //New game
+//TODO: Remove the clg when the game is completed
 reset.onclick = () => {
-  console.clear() //Delete later
+  console.clear()
   clearCanvas()
   start()
 }
 
 //On keyboard
+//TODO: Remove the clg when the game is completed
 document.addEventListener("keydown", (event) => {
   if (event.key == "ArrowLeft") {
     moveBlock("left", left)
