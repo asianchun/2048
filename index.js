@@ -20,6 +20,8 @@ const left = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const down = [0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]
 const up = [15, 11, 7, 3, 14, 10, 6, 2, 13, 9, 5, 1, 12, 8, 4, 0]
 let takenTiles = []
+let success = false
+let iteration = 0
 
 //Functions
 let start = () => {
@@ -91,9 +93,13 @@ function combineBlock() {
 }
 
 function countIterations(ar, i, n, spread, operator) {
-  let iteration = 3
-
-  //Control the left and up movement
+  /*
+   * Because up & down movements are 4 apart, it created
+   * an issue where all the blocks would get put in the top row
+   * i.e. (0,4,7,8) -> iteration 2; expected 0
+   * Hence, success attribute was created to prevent it
+   */
+  //Count the left and up movement
   if (operator == "-") {
     if (
       takenTiles[i] - 3 * spread == takenTiles[n] ||
@@ -101,8 +107,18 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[5] ||
       takenTiles[i] == ar[9] ||
       takenTiles[i] == ar[13]
-    )
-      iteration = 2
+    ) {
+      if (spread == 1) {
+        iteration = 2
+      } else if (spread == 4) {
+        if (takenTiles[i] - 3 * spread == takenTiles[n]) {
+          iteration = 2
+          success = true
+        } else if (!success) {
+          iteration = 2
+        }
+      }
+    }
 
     if (
       takenTiles[i] - 2 * spread == takenTiles[n] ||
@@ -110,8 +126,18 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[6] ||
       takenTiles[i] == ar[10] ||
       takenTiles[i] == ar[14]
-    )
-      iteration = 1
+    ) {
+      if (spread == 1) {
+        iteration = 1
+      } else if (spread == 4) {
+        if (takenTiles[i] - 2 * spread == takenTiles[n]) {
+          iteration = 1
+          success = true
+        } else if (!success) {
+          iteration = 1
+        }
+      }
+    }
 
     if (
       takenTiles[i] - 1 * spread == takenTiles[n] ||
@@ -119,10 +145,20 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[7] ||
       takenTiles[i] == ar[11] ||
       takenTiles[i] == ar[15]
-    )
-      iteration = 0
+    ) {
+      if (spread == 1) {
+        iteration = 0
+      } else if (spread == 4) {
+        if (takenTiles[i] - 1 * spread == takenTiles[n]) {
+          iteration = 0
+          success = true
+        } else if (!success) {
+          iteration = 0
+        }
+      }
+    }
   }
-  //Control the right and down movement
+  //Count the right and down movement
   else if (operator == "+") {
     if (
       takenTiles[i] + 3 * spread == takenTiles[n] ||
@@ -130,8 +166,18 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[5] ||
       takenTiles[i] == ar[9] ||
       takenTiles[i] == ar[13]
-    )
-      iteration = 2
+    ) {
+      if (spread == 1) {
+        iteration = 2
+      } else if (spread == 4) {
+        if (takenTiles[i] + 3 * spread == takenTiles[n]) {
+          iteration = 2
+          success = true
+        } else if (!success) {
+          iteration = 2
+        }
+      }
+    }
 
     if (
       takenTiles[i] + 2 * spread == takenTiles[n] ||
@@ -139,8 +185,18 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[6] ||
       takenTiles[i] == ar[10] ||
       takenTiles[i] == ar[14]
-    )
-      iteration = 1
+    ) {
+      if (spread == 1) {
+        iteration = 1
+      } else if (spread == 4) {
+        if (takenTiles[i] + 2 * spread == takenTiles[n]) {
+          iteration = 1
+          success = true
+        } else if (!success) {
+          iteration = 1
+        }
+      }
+    }
 
     if (
       takenTiles[i] + 1 * spread == takenTiles[n] ||
@@ -148,11 +204,19 @@ function countIterations(ar, i, n, spread, operator) {
       takenTiles[i] == ar[7] ||
       takenTiles[i] == ar[11] ||
       takenTiles[i] == ar[15]
-    )
-      iteration = 0
+    ) {
+      if (spread == 1) {
+        iteration = 0
+      } else if (spread == 4) {
+        if (takenTiles[i] + 1 * spread == takenTiles[n]) {
+          iteration = 0
+          success = true
+        } else if (!success) {
+          iteration = 0
+        }
+      }
+    }
   }
-
-  return iteration
 }
 
 function moveBlock(direction, array) {
@@ -170,26 +234,27 @@ function moveBlock(direction, array) {
   //Move each block accordingly
   for (let i in takenTiles) {
     let tile = playArea[takenTiles[i]].childNodes
-    let iteration = 0
+    iteration = 3
+    success = false
 
     //Check by how much to move each block
     for (let n in takenTiles) {
       switch (direction) {
         case "right":
           if (takenTiles[i] < takenTiles[n] || i == 0)
-            iteration = countIterations(array, i, n, 1, "+")
+            countIterations(array, i, n, 1, "+")
           break
         case "left":
           if (takenTiles[i] > takenTiles[n] || i == 0)
-            iteration = countIterations(array, i, n, 1, "-")
+            countIterations(array, i, n, 1, "-")
           break
         case "down":
           if (takenTiles[i] < takenTiles[n] || i == 0)
-            iteration = countIterations(array, i, n, 4, "+")
+            countIterations(array, i, n, 4, "+")
           break
         case "up":
           if (takenTiles[i] > takenTiles[n] || i == 0)
-            iteration = countIterations(array, i, n, 4, "-")
+            countIterations(array, i, n, 4, "-")
           break
         default:
           console.log("Something went wrong")
@@ -219,6 +284,7 @@ function moveBlock(direction, array) {
     }
   }
 
+  //TODO: Don't create block if nothing changed
   createBlock()
 }
 
@@ -231,20 +297,15 @@ reset.onclick = () => {
 }
 
 //On keyboard
-//TODO: Remove the clg when the game is completed
 document.addEventListener("keydown", (event) => {
   if (event.key == "ArrowLeft") {
     moveBlock("left", left)
-    console.log("Go left boi")
   } else if (event.key == "ArrowRight") {
     moveBlock("right", right)
-    console.log("Go right boi")
   } else if (event.key == "ArrowDown") {
     moveBlock("down", down)
-    console.log("Go down boi")
   } else if (event.key == "ArrowUp") {
     moveBlock("up", up)
-    console.log("Go up boi")
   }
 })
 
