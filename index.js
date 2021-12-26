@@ -20,6 +20,7 @@ const left = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const down = [0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]
 const up = [15, 11, 7, 3, 14, 10, 6, 2, 13, 9, 5, 1, 12, 8, 4, 0]
 let takenTiles = []
+let gameOver = []
 let success = false
 let iteration = 0
 
@@ -30,8 +31,23 @@ let start = () => {
   }
 }
 
+function checkGameOver(direction) {
+  let count = true
+
+  if (takenTiles.length == playArea.length) {
+    gameOver.forEach((item) => {
+      if (item == direction) count = false
+    })
+
+    if (count) gameOver.push(direction)
+
+    if (gameOver.length == 4) score.innerText = "You done out here!"
+  }
+}
+
 function clearCanvas() {
   takenTiles = []
+  gameOver = []
   lose = false
   score.innerText = "Good luck!"
 
@@ -287,11 +303,8 @@ function moveBlock(direction, array) {
     }
   }
 
-  //Check whether the play area is full
-  //TODO: Create gameOver() + upgrade this code
-  if (takenTiles.length == playArea.length) {
-    score.innerText = "You done out here!"
-  }
+  //Check whether the game is over / play area is full
+  checkGameOver(direction)
 
   //Check whether to place a new block
   takenTiles.forEach((tile, index) => {
