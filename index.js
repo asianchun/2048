@@ -35,8 +35,8 @@ function clearCanvas() {
   lose = false
   score.innerText = "Good luck!"
 
-  for (let i in playArea) {
-    let block = playArea[i].children
+  for (let area of playArea) {
+    let block = area.children
 
     if (block === undefined) break
 
@@ -49,19 +49,13 @@ function createBlock() {
   let type = Math.floor(Math.random() * 2)
   let randomNumber = 0
 
-  //Make sure new blocks can be placed
-  if (takenTiles.length == playArea.length) {
-    score.innerText = "You done out here!"
-    return
-  }
-
   //Make sure both blocks are not in the same area
   do {
     exit = true
     randomNumber = Math.floor(Math.random() * playArea.length)
 
-    for (let i in takenTiles) {
-      if (takenTiles[i] == randomNumber) exit = false
+    for (let tile of takenTiles) {
+      if (tile == randomNumber) exit = false
     }
   } while (!exit)
 
@@ -220,6 +214,10 @@ function countIterations(ar, i, n, spread, operator) {
 }
 
 function moveBlock(direction, array) {
+  //Control whether new block gets created or not
+  let previousState = []
+  let equal = true
+
   //Sort the array in order to have proper movement
   if (direction == "right" || direction == "down") {
     takenTiles.sort(function (x, y) {
@@ -229,6 +227,11 @@ function moveBlock(direction, array) {
     takenTiles.sort(function (x, y) {
       return x - y
     })
+  }
+
+  //Load the previous state
+  for (let tile of takenTiles) {
+    previousState.push(tile)
   }
 
   //Move each block accordingly
@@ -284,14 +287,22 @@ function moveBlock(direction, array) {
     }
   }
 
-  //TODO: Don't create block if nothing changed
-  createBlock()
+  //Check whether the play area is full
+  //TODO: Create gameOver() + upgrade this code
+  if (takenTiles.length == playArea.length) {
+    score.innerText = "You done out here!"
+  }
+
+  //Check whether to place a new block
+  takenTiles.forEach((tile, index) => {
+    if (tile != previousState[index]) equal = false
+  })
+
+  if (!equal) createBlock()
 }
 
 //New game
-//TODO: Remove the clg when the game is completed
 reset.onclick = () => {
-  console.clear()
   clearCanvas()
   start()
 }
@@ -309,5 +320,5 @@ document.addEventListener("keydown", (event) => {
   }
 })
 
-//Game logic
+//Game start
 start()
