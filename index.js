@@ -108,7 +108,7 @@ function createBlock() {
   }
 }
 
-//TODO: DEBUGGGGG
+//TODO: Comment where necessary
 function combineBlock(direction) {
   /*
    * Left will use right, up will use down and vice versa
@@ -119,6 +119,8 @@ function combineBlock(direction) {
       console.log("blocks combined right")
       break
     case "left":
+      // TODO: Need this -> ar[3] || ar[7] || ar[11] || ar[15]
+      // TODO: Create a function out of this
       for (let i = 0; i < right.length; i++) {
         if (i == right.length - 1) break
 
@@ -137,12 +139,12 @@ function combineBlock(direction) {
               progression[index],
               progression[index + 1]
             )
+
+            takenTiles.splice(takenTiles.indexOf(right[i + 1]), 1)
             nextBlock[0].remove()
           }
         }
       }
-
-      // * Need this -> ar[3] || ar[7] || ar[11] || ar[15]
       break
     case "down":
       console.log("blocks combined down")
@@ -356,7 +358,9 @@ function moveBlock(direction) {
     }
   }
 
-  //TODO: Move this after combineBlock()
+  //Combine blocks if possible
+  combineBlock("left")
+
   //Check whether the game is over / play area is full
   checkGameOver(direction)
 
@@ -379,7 +383,6 @@ reset.onclick = () => {
 document.addEventListener("keydown", (event) => {
   if (event.key == "ArrowLeft") {
     moveBlock("left")
-    combineBlock("left")
   } else if (event.key == "ArrowRight") {
     moveBlock("right")
   } else if (event.key == "ArrowDown") {
