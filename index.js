@@ -33,6 +33,7 @@ const left = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 const down = [0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15]
 const up = [15, 11, 7, 3, 14, 10, 6, 2, 13, 9, 5, 1, 12, 8, 4, 0]
 let takenTiles = []
+let previousState = []
 let gameOver = []
 let success = false
 let iteration = 0
@@ -59,6 +60,7 @@ function checkGameOver(direction) {
 }
 
 function clearCanvas() {
+  previousState = []
   takenTiles = []
   gameOver = []
   lose = false
@@ -109,6 +111,9 @@ function createBlock() {
 }
 
 function combineBlock(direction) {
+  //Control whether new block gets created or not
+  let equal = true
+
   /*
    * Left will use right, up will use down and vice versa
    * This is the only way to combine properly
@@ -129,9 +134,26 @@ function combineBlock(direction) {
     default:
       console.log("Something went wrong")
   }
+
+  //Check whether to place a new block
+  takenTiles.forEach((tile, index) => {
+    if (
+      tile != previousState[index] ||
+      takenTiles.length < previousState.length
+    )
+      equal = false
+  })
+
+  //Move the blocks again after combining
+  moveBlock(direction)
+
+  //Check whether the game is over / play area is full
+  checkGameOver(direction)
+
+  //Create new block, if necessary
+  if (!equal) createBlock()
 }
 
-//TODO: Comment where necessary
 function combine(array) {
   for (let i = 0; i < array.length; i++) {
     if (i == array.length - 1) break
@@ -140,16 +162,21 @@ function combine(array) {
     let nextBlock = playArea[array[i + 1]].children
     let index = 0
 
+    //If edge block, don't combine it with the next row/column
     if (i != 3 && i != 7 && i != 11) {
+      //Only combine if there are two blocks together
       if (block.length != 0 && nextBlock.length != 0) {
+        //Only combine if the two blocks are the same
         if (block[0].classList.item(2) == nextBlock[0].classList.item(2)) {
           for (let n = 0; n < progression.length; n++) {
             if (progression[n] == block[0].classList.item(2)) index = n
           }
 
+          //Replace the old block with the new
           block[0].innerText = numericProgression[index + 1]
           block[0].classList.replace(progression[index], progression[index + 1])
 
+          //Remove the second block used for combining
           takenTiles.splice(takenTiles.indexOf(array[i + 1]), 1)
           nextBlock[0].remove()
         }
@@ -285,11 +312,9 @@ function countIterations(ar, i, n, spread, operator) {
   }
 }
 
-//TODO: Move, Combine, then move again, then create a new block
 function moveBlock(direction) {
-  //Control whether new block gets created or not
-  let previousState = []
-  let equal = true
+  //Reset for whether new block gets created
+  previousState = []
 
   //Sort the array in order to have proper movement
   if (direction == "right" || direction == "down") {
@@ -359,19 +384,6 @@ function moveBlock(direction) {
         console.log("Something went wrong")
     }
   }
-
-  //Combine blocks if possible
-  combineBlock(direction)
-
-  //Check whether the game is over / play area is full
-  checkGameOver(direction)
-
-  //Check whether to place a new block
-  takenTiles.forEach((tile, index) => {
-    if (tile != previousState[index]) equal = false
-  })
-
-  if (!equal) createBlock()
 }
 
 //New game
@@ -384,12 +396,16 @@ reset.onclick = () => {
 document.addEventListener("keydown", (event) => {
   if (event.key == "ArrowLeft") {
     moveBlock("left")
+    combineBlock("left")
   } else if (event.key == "ArrowRight") {
     moveBlock("right")
+    combineBlock("right")
   } else if (event.key == "ArrowDown") {
     moveBlock("down")
+    combineBlock("down")
   } else if (event.key == "ArrowUp") {
     moveBlock("up")
+    combineBlock("up")
   }
 })
 
