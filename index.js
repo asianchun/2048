@@ -108,7 +108,6 @@ function createBlock() {
   }
 }
 
-//TODO: Comment where necessary
 function combineBlock(direction) {
   /*
    * Left will use right, up will use down and vice versa
@@ -116,44 +115,46 @@ function combineBlock(direction) {
    */
   switch (direction) {
     case "right":
-      console.log("blocks combined right")
+      combine(left)
       break
     case "left":
-      // TODO: Need this -> ar[3] || ar[7] || ar[11] || ar[15]
-      // TODO: Create a function out of this
-      for (let i = 0; i < right.length; i++) {
-        if (i == right.length - 1) break
-
-        let block = playArea[right[i]].children
-        let nextBlock = playArea[right[i + 1]].children
-        let index = 0
-
-        if (block.length != 0 && nextBlock.length != 0) {
-          if (block[0].classList.item(2) == nextBlock[0].classList.item(2)) {
-            for (let i = 0; i < progression.length; i++) {
-              if (progression[i] == block[0].classList.item(2)) index = i
-            }
-
-            block[0].innerText = numericProgression[index + 1]
-            block[0].classList.replace(
-              progression[index],
-              progression[index + 1]
-            )
-
-            takenTiles.splice(takenTiles.indexOf(right[i + 1]), 1)
-            nextBlock[0].remove()
-          }
-        }
-      }
+      combine(right)
       break
     case "down":
-      console.log("blocks combined down")
+      combine(up)
       break
     case "up":
-      console.log("blocks combined up")
+      combine(down)
       break
     default:
       console.log("Something went wrong")
+  }
+}
+
+//TODO: Comment where necessary
+function combine(array) {
+  for (let i = 0; i < array.length; i++) {
+    if (i == array.length - 1) break
+
+    let block = playArea[array[i]].children
+    let nextBlock = playArea[array[i + 1]].children
+    let index = 0
+
+    if (i != 3 && i != 7 && i != 11) {
+      if (block.length != 0 && nextBlock.length != 0) {
+        if (block[0].classList.item(2) == nextBlock[0].classList.item(2)) {
+          for (let n = 0; n < progression.length; n++) {
+            if (progression[n] == block[0].classList.item(2)) index = n
+          }
+
+          block[0].innerText = numericProgression[index + 1]
+          block[0].classList.replace(progression[index], progression[index + 1])
+
+          takenTiles.splice(takenTiles.indexOf(array[i + 1]), 1)
+          nextBlock[0].remove()
+        }
+      }
+    }
   }
 }
 
@@ -284,6 +285,7 @@ function countIterations(ar, i, n, spread, operator) {
   }
 }
 
+//TODO: Move, Combine, then move again, then create a new block
 function moveBlock(direction) {
   //Control whether new block gets created or not
   let previousState = []
@@ -359,7 +361,7 @@ function moveBlock(direction) {
   }
 
   //Combine blocks if possible
-  combineBlock("left")
+  combineBlock(direction)
 
   //Check whether the game is over / play area is full
   checkGameOver(direction)
@@ -374,7 +376,6 @@ function moveBlock(direction) {
 
 //New game
 reset.onclick = () => {
-  console.clear()
   clearCanvas()
   start()
 }
