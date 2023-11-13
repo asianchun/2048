@@ -32,7 +32,7 @@ To run the 2048 Game locally, follow these steps:
    git clone https://github.com/asianchun/2048.git
    ```
 2. Open the "index.html" file in your preferred web browser.                            
-3. That's it! You're ready to play the Hangman Game.
+3. That's it! You're ready to play the 2048 Game.
 
 ## How to Play
 
