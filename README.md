@@ -10,7 +10,6 @@ Welcome to the 2048 Game project! This is a web-based implementation of the popu
 - [How to Play](#how-to-play)
 - [Customisation](#customisation)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Demo
 
