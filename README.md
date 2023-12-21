@@ -13,7 +13,7 @@ Welcome to the 2048 Game project! This is a web-based implementation of the popu
 
 ## Demo
 
-Check out the live demo of the 2048 Game [here](https://weathered-haze-1094.on.fleek.co/).
+Check out the live demo of the 2048 Game [here](https://tiles-game.onrender.com/).
 
 ## Features
 
